@@ -37,7 +37,7 @@ def main():
 @app.route('/upload', methods=['POST'])
 def upload():
     json = request.get_json()
-    print json
+
     response = Response()
     response.set_cookie(key="success", value="True")
     response.set_cookie(key="num_processed", value="123")
@@ -55,11 +55,13 @@ def customers_page():
 @app.route('/customers/<id>')
 def customer_overview(id):
     name = query_db("select * from customers where customer_id=" + str(id))
-    return render_template("graphs.html", id=id, name=name[0])
+    timestamps = query_db("select * from customer_actions where customer_id="+ str(id) +" order by timestamp asc")
+    
+    return render_template("graphs.html", id=id, name=name[0], timestamps=timestamps)
 
 @app.route('/customers/data/ids', methods=['GET'])
 def get_customers():
-    print query_db("select * from customers")
+   
     resp = Response(response=query_db("select * from customers"),
                     status=200,
                     mimetype="application/json")
@@ -68,12 +70,13 @@ def get_customers():
 @app.route('/customers/data/actions/<id>', methods=['GET'])
 def get_stats(id):
     a = query_db("select timestamp from customer_actions where customer_id=123 order by timestamp asc")
-    print a
+
     '''
     resp = Response(response=query_db("select * from customer_actions where customer_id=123 order by timestamp asc"),
                     status=200,
                     mimetype="application/json")
-    return resp
+    
     '''
+    return a
 if __name__ == "__main__":
     app.run(use_debugger=True, debug=True)
