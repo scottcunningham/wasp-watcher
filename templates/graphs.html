@@ -1,0 +1,28 @@
+<html>
+	<head>
+		<title>Customers</title>
+		{% block javascript %}
+			<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+			<script type="text/javascript">
+		      google.load('visualization', '1', {'packages': ['corechart']});
+		    </script>
+		    <script type="text/javascript">
+		        {% include "script.js" %}
+		    </script>
+		    <script type="text/javascript">
+		      google.setOnLoadCallback(initialize({{ id }}));
+		    </script>
+	    {% endblock %}
+	</head>
+	<body>
+		<h1>Overview</h1>
+		{% if id %}
+		  <h2>Displaying graphs for {{ name }} : {{ id }}</h2>
+		{% endif %}
+
+		<div id="graph" style="width: 900px; height: 500px;">
+			Loading...
+			<!-- insert loading svg -->
+		</div>
+	</body>
+</html>

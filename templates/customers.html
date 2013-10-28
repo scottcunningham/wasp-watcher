@@ -1,4 +1,15 @@
-<title>Customers</title>
-{% if id %}
-  <h1>Displaying graphs for customer {{ id }}!</h1>
-{% endif %}
+<html>
+	<head>
+		<title>Customers</title>
+	</head>
+	<body>
+		<h1>Patients overview page:</h1>
+		{% block body %}
+		  <ul>
+		  {% for customer in customers %}
+		    <li> <a href="customers/{{customer[0]}}">{{customer[1]}} (id: {{customer[0]}})</li>
+		  {% endfor %}
+		  </ul>
+		{% endblock %}
+	</body>
+</html>
