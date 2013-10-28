@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+
+Name       : Justifiable 
+Description: A two-column, fixed-width design with dark color scheme.
+Version    : 1.0
+Released   : 20130801
+
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="default.css" rel="stylesheet" type="text/css" media="all" />
+<link href="fonts.css" rel="stylesheet" type="text/css" media="all" />
+
+<!--[if IE 6]><link href="default_ie6.css" rel="stylesheet" type="text/css" /><![endif]-->
+
+		<title>Customers</title>
+		{% block javascript %}
+		    <script type="text/javascript">
+			{% include "jquery.js" %}
+			{% include "chart.js" %}
+		    </script>
+		    <script type="text/javascript">
+
+$( document ).ready(function() {
+				//Get the context of the canvas element we want to select
+				var canvas = document.getElementById("chart");
+				if (null==canvas  || !canvas.getContext("2d")) return;
+				var ctx = canvas.getContext("2d");
+
+
+				// setup the data to be plotted
+				var timestamps = {{ timestamps }};
+				console.debug(timestamps);
+				for(var i=0; i<timestamps.length; i++){
+					console.debug(timestamps[i]);
+				}
+				var data = {
+	labels : ["January","February","March","April","May","June","July"],
+	datasets : [
+		{
+			fillColor : "rgba(220,220,220,0.5)",
+			strokeColor : "rgba(220,220,220,1)",
+			pointColor : "rgba(220,220,220,1)",
+			pointStrokeColor : "#fff",
+			data : [65,59,90,81,56,55,40]
+		},
+		{
+			fillColor : "rgba(151,187,205,0.5)",
+			strokeColor : "rgba(151,187,205,1)",
+			pointColor : "rgba(151,187,205,1)",
+			pointStrokeColor : "#fff",
+			data : [28,48,40,19,96,27,100]
+		}
+	]
+};
+			new Chart(ctx).Line(data);
+});
+
+
+
+		    </script>
+	    {% endblock %}
+
+</head>
+<body>
+<div id="logo" class="container">
+	<h1><span class="icon icon-lock icon-size"></span><a href="#">Emergency Medical Hologram</span></a></h1>
+</div>
+<div id="wrapper" class="container">
+	<div id="menu" class="container">
+		<ul>
+			<li><a href="#" accesskey="1" title="">Homepage</a></li>
+			<li><a href="#" accesskey="2" title="">Patient overview</a></li>
+		</ul>
+	</div>
+	<div id="one-column" class="container">
+		<div><span class="arrow-down"></span></div>
+		<div id="tbox1"></span>
+			<div class="title">
+			{% if id %}
+			  <h2>Displaying graphs for patient {{ name }}.</h2>
+			{% endif %}
+			</div>
+			<div>
+			<canvas id="chart" width="400" height="400"></canvas>
+			</div>
+	</div>
+</div>
+<div id="copyright">
+	<p>Copyright (c) 2013 Sitename.com. All rights reserved. | Design by <a href="http://www.freecsstemplates.org/" rel="nofollow">FreeCSSTemplates.org</a>.</p>
+</div>
+</body>
+</html>

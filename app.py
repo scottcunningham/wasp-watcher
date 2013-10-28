@@ -57,7 +57,7 @@ def customer_overview(id):
     name = query_db("select * from customers where customer_id=" + str(id))
     timestamps = query_db("select * from customer_actions where customer_id="+ str(id) +" order by timestamp asc")
     
-    return render_template("graphs.html", id=id, name=name[0], timestamps=timestamps)
+    return render_template("graphs.html", id=id, name=name[0][1], timestamps=timestamps)
 
 @app.route('/customers/data/ids', methods=['GET'])
 def get_customers():

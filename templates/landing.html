@@ -1,11 +1,26 @@
-<html>
-    <head>
-        <title>Welcome to the app :)</title>
-    </head>
-    <body>
-        <h1>Emergency Medical Hologram</h1>
-        <p>
-            Check out the <a href="customers">patient overview page.</a>
-        </p>
-    </body>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href={{ url_for('static', filename='default.css') }} rel="stylesheet" type="text/css" media="all"/>
+<title>Patients</title>
+</head>
+<body>
+<div id="logo" class="container">
+	<h1><span class="icon icon-lock icon-size"></span><a href="#">Emergency Medical Hologram</span></a></h1>
+</div>
+<div id="wrapper" class="container">
+	<div id="menu" class="container">
+		<ul>
+			<li><a href="../" accesskey="1" title="">Homepage</a></li>
+			<li><a href="../customers" accesskey="2" title="">Patient overview</a></li>
+		</ul>
+	</div>
+	<div id="one-column" class="container">
+		<h3>Check out the <a href="customers">patient overview page.</a></h3>
+	</div>
+</div>
+<div id="copyright">
+	<p>Copyright (c) 2013 Sitename.com. All rights reserved. | Design by <a href="http://www.freecsstemplates.org/" rel="nofollow">FreeCSSTemplates.org</a>.</p>
+</div>
+</body>
 </html>
