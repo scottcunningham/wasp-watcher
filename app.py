@@ -44,7 +44,7 @@ def main():
 
 @app.route('/upload', methods=['POST'])
 def upload():
-    print request.values["uid"]
+    query_db("insert into customer_actions values (" + request.values["uid"] + ", " + str(int(time.time()*1000)) + ")")
     return Response(status=200)
 
 @app.route('/upload', methods=['GET'])
