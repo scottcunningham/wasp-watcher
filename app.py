@@ -61,10 +61,10 @@ def customer_overview(id):
     ts_one_week_ago = int(time.time() * 1000) - ONE_DAY_MILLIS*7
     # The SQL gets all door activity between now and exactly one week ago, and figures out how many days ago each movement
     # was by getting (timestamp - timestamp of one week ago) / the number of ms in one day
-    timestamps = query_db(" SELECT count from (SELECT (timestamp - " + str(ts_one_week_ago) + ")/" + str(ONE_DAY_MILLIS) + " AS days_ago, COUNT(customer_id) as count FROM customer_actions WHERE customer_id=" + str(id) + " AND timestamp > " + str(ts_one_week_ago) + " AND customer_id=" + str(id) + " GROUP BY days_ago ORDER BY days_ago DESC)")
-    print timestamps
+    timestamps = query_db(" SELECT (timestamp - " + str(ts_one_week_ago) + ")/" + str(ONE_DAY_MILLIS) + " AS days_ago, COUNT(customer_id) as count FROM customer_actions WHERE customer_id=" + str(id) + " AND timestamp > " + str(ts_one_week_ago) + " AND customer_id=" + str(id) + " GROUP BY days_ago ORDER BY days_ago DESC")
+    # print timestamps
     name = query_db("select * from customers where customer_id=" + str(id))
-    return render_template("graphs.html", id=id, name=name[0][1], timestamps=json.dumps(timestamps))
+    return render_template("graphs.html", id=id, name=name[0][1], timestamps=timestamps)
 
 @app.route('/customers/data/ids', methods=['GET'])
 def get_customers():
