@@ -62,7 +62,7 @@ def customer_overview(id):
     ts_one_week_ago = int(time.time() * 1000) - ONE_DAY_MILLIS*7
     # The SQL gets all door activity between now and exactly one week ago, and figures out how many days ago each movement
     # was by getting (timestamp - timestamp of one week ago) / the number of ms in one day
-    timestamps = query_db(" SELECT (timestamp - " + str(ts_one_week_ago) + ")/" + str(ONE_DAY_MILLIS) + " AS days_ago, COUNT(customer_id) as count FROM customer_actions WHERE customer_id=" + str(id) + " AND timestamp > " + str(ts_one_week_ago) + " AND customer_id=" + str(id) + " GROUP BY days_ago ORDER BY days_ago DESC")
+    timestamps = query_db(" SELECT (7- (timestamp - " + str(ts_one_week_ago) + ")/" + str(ONE_DAY_MILLIS) + ") AS days_ago, COUNT(customer_id) as count FROM customer_actions WHERE customer_id=" + str(id) + " AND timestamp > " + str(ts_one_week_ago) + " AND customer_id=" + str(id) + " GROUP BY days_ago ORDER BY days_ago DESC")
     # Get all the timestamps in the one week range to display details of movement in the last week.
     raw_more_data = query_db("select * from customer_actions where customer_id=" + str(id) + " and timestamp > " + str(ts_one_week_ago))
     more_data = []
