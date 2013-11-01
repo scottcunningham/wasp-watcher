@@ -7,6 +7,7 @@ from flask import g
 from flask import jsonify
 import json
 import time
+import datetime
 
 app = Flask(__name__)
 
@@ -62,9 +63,25 @@ def customer_overview(id):
     # The SQL gets all door activity between now and exactly one week ago, and figures out how many days ago each movement
     # was by getting (timestamp - timestamp of one week ago) / the number of ms in one day
     timestamps = query_db(" SELECT (timestamp - " + str(ts_one_week_ago) + ")/" + str(ONE_DAY_MILLIS) + " AS days_ago, COUNT(customer_id) as count FROM customer_actions WHERE customer_id=" + str(id) + " AND timestamp > " + str(ts_one_week_ago) + " AND customer_id=" + str(id) + " GROUP BY days_ago ORDER BY days_ago DESC")
+    # Get all the timestamps in the one week range to display details of movement in the last week.
+    raw_more_data = query_db("select * from customer_actions where customer_id=" + str(id) + " and timestamp > " + str(ts_one_week_ago))
+    more_data = []
+    temp=[];
+    for data in raw_more_data:
+        date = datetime.datetime.fromtimestamp(data[1]/1e3).strftime('%d/%m/%Y')
+        exists = 0
+        for added in more_data:
+            if(added[0] == date):
+                exists = 1
+                added[1].append(datetime.datetime.fromtimestamp(data[1]/1e3).strftime('%H:%M:%S'))
+        if (exists == 0): 
+            temp.append(datetime.datetime.fromtimestamp(data[1]/1e3).strftime('%H:%M:%S'))
+            more_data.append([datetime.datetime.fromtimestamp(data[1]/1e3).strftime('%d/%m/%Y'), temp])
+            temp = []
+
     # print timestamps
     name = query_db("select * from customers where customer_id=" + str(id))
-    return render_template("graphs.html", id=id, name=name[0][1], timestamps=timestamps)
+    return render_template("graphs.html", id=id, name=name[0][1], timestamps=timestamps, more=more_data)
 
 @app.route('/customers/data/ids', methods=['GET'])
 def get_customers():

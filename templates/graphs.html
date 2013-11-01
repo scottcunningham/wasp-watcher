@@ -17,15 +17,17 @@
             var ctx = canvas.getContext("2d");
 
             // setup the data to be plotted
-		var labels = [];
-		var data = [];
-		  {% for message in timestamps %}
-    console.debug('{{message[0]}} days ago: {{message[1]}}');
-	labels.push('{{message[0]}} days ago');
-	data.push({{message[1]}});
-  {% endfor %}
-		
-            
+			var labels = [];
+			var data = [];
+			{% for message in timestamps %}
+    			console.debug('{{message[0]}} days ago: {{message[1]}}');
+				labels.push('{{message[0]}} days ago');
+				data.push({{message[1]}});
+  			{% endfor %}
+  			console.debug('PRINTING DATA NOW for table');
+  			console.debug('{{more}}');
+  			
+
             var data = {
                 labels : labels,
                 datasets : [
@@ -58,14 +60,36 @@
 	<div id="one-column" class="container">
 		<div><span class="arrow-down"></span></div>
 		<div id="tbox1"></span>
-			<div class="title">
 			{% if id %}
-			  <h2>Displaying graphs for patient {{ name }}.</h2>
+				<div class="title">
+					  <h2>Displaying graphs for patient {{ name }}.</h2>
+				</div>
+				<div>
+					<canvas id="chart" width="800" height="400"></canvas>
+				</div>
+				<div>
+					<br/>
+					<h2> More details of last week </h2>
+					<!-- Insert detailed table here -->
+					<table border="1">
+						<tr>
+							<th>Date</th>
+							<th>Times</th>
+						</tr>
+						{% for data in more %}
+								<tr>
+		  							<td>{{data[0]}}</td>
+		  							<td> 
+		  								{% for time in data[1] %}
+		  									{{time}}
+		  								{% endfor %}
+		  							</td>
+	  							</tr>
+	  					{% endfor %}
+					</table>
+				</div>
 			{% endif %}
-			</div>
-			<div>
-			<canvas id="chart" width="800" height="400"></canvas>
-			</div>
+
 	</div>
 </div>
 <div id="copyright">
