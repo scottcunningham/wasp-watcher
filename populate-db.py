@@ -6,9 +6,6 @@ import datetime
 
 customer_id = "123"
 
-import sqlite3
-conn = sqlite3.connect('example.db')
-
 current_milli_time = lambda: int(round(time.time() * 1000))
 
 def ms2str(milliseconds):
