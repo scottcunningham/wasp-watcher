@@ -63,14 +63,16 @@
 			{% if id %}
 				<div class="title">
 					  <h2>Displaying graphs for patient {{ name }}.</h2>
+                      <br/><br/>
 				</div>
 				<div>
+                    <h3>Door movements over time (bucketed by day):</h3>
 					<canvas id="chart" width="800" height="400"></canvas>
 				</div>
 				<div>
 					<br/>
-					<h2> More details of last week </h2>
-					<!-- Insert detailed table here -->
+					<h3>All door movement times over the last week:</h3>
+                    <br />
 					<table border="1">
 						<tr>
 							<th>Date</th>

@@ -4,7 +4,7 @@ import random
 import time
 import datetime
 
-customer_id = "123"
+customer_id = "999"
 
 current_milli_time = lambda: int(round(time.time() * 1000))
 
