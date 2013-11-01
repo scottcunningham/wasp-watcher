@@ -3,10 +3,18 @@ from flask import request
 from flask import Response
 from flask import render_template
 import sqlite3
-from flask import jsonify
 from flask import g
+from flask import jsonify
+import json
+import time
 
 app = Flask(__name__)
+
+ONE_SECOND_MILLIS = 1000
+ONE_MINUTE_MILLIS = ONE_SECOND_MILLIS * 60
+ONE_HOUR_MILLIS = ONE_MINUTE_MILLIS * 60 
+ONE_DAY_MILLIS = ONE_HOUR_MILLIS * 24
+ONE_WEEK_MILLIS = ONE_DAY_MILLIS * 7
 
 DATABASE = 'sqlite-database.db'
 
@@ -36,12 +44,8 @@ def main():
 
 @app.route('/upload', methods=['POST'])
 def upload():
-    json = request.get_json()
-
-    response = Response()
-    response.set_cookie(key="success", value="True")
-    response.set_cookie(key="num_processed", value="123")
-    return response
+    print request.values["uid"]
+    return Response(status=200)
 
 @app.route('/upload', methods=['GET'])
 def upload_page():
@@ -54,29 +58,22 @@ def customers_page():
 
 @app.route('/customers/<id>')
 def customer_overview(id):
+    ts_one_week_ago = int(time.time() * 1000) - ONE_DAY_MILLIS*7
+    # The SQL gets all door activity between now and exactly one week ago, and figures out how many days ago each movement
+    # was by getting (timestamp - timestamp of one week ago) / the number of ms in one day
+    timestamps = query_db("SELECT (timestamp - " + str(ts_one_week_ago) + ")/" + str(ONE_DAY_MILLIS) + " AS days_ago, COUNT(customer_id) FROM customer_actions WHERE customer_id=" + str(id) + " AND timestamp > " + str(ts_one_week_ago) + " AND customer_id=" + str(id) + " GROUP BY days_ago ORDER BY days_ago DESC")
+    print timestamps
     name = query_db("select * from customers where customer_id=" + str(id))
-    timestamps = query_db("select * from customer_actions where customer_id="+ str(id) +" order by timestamp asc")
-    
-    return render_template("graphs.html", id=id, name=name[0][1], timestamps=timestamps)
+    return render_template("graphs.html", id=id, name=name[0][1], timestamps=json.dumps(timestamps))
 
 @app.route('/customers/data/ids', methods=['GET'])
 def get_customers():
-   
-    resp = Response(response=query_db("select * from customers"),
-                    status=200,
-                    mimetype="application/json")
-    return resp
+    return query_db("select * from customers")
 
 @app.route('/customers/data/actions/<id>', methods=['GET'])
 def get_stats(id):
-    a = query_db("select timestamp from customer_actions where customer_id=123 order by timestamp asc")
-
-    '''
-    resp = Response(response=query_db("select * from customer_actions where customer_id=123 order by timestamp asc"),
-                    status=200,
-                    mimetype="application/json")
-    
-    '''
+    a = query_db("select timestamp from customer_actions where customer_id=" + str(id) + " ORDER BY timestamp asc")
     return a
+
 if __name__ == "__main__":
     app.run(use_debugger=True, debug=True)
